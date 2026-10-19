@@ -48,7 +48,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           monaco: ['monaco-editor'],
-          yjs: ['yjs', 'y-monaco'],
+          yjs: ['yjs'],
           vendor: ['react', 'react-dom', 'react-router-dom', 'socket.io-client'],
         },
       },
