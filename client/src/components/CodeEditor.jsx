@@ -30,13 +30,35 @@ function useRemoteCursorStyles(awareness) {
 
 export default function CodeEditor({ doc, awareness, language }) {
   const bindingRef = useRef(null);
+  const remeasureRef = useRef(null);
   useRemoteCursorStyles(awareness);
 
-  useEffect(() => () => { bindingRef.current?.destroy(); bindingRef.current = null; }, [doc]);
+  useEffect(() => () => {
+    if (remeasureRef.current && typeof document !== 'undefined' && document.fonts) {
+      document.fonts.removeEventListener('loadingdone', remeasureRef.current);
+      remeasureRef.current = null;
+    }
+    bindingRef.current?.destroy();
+    bindingRef.current = null;
+  }, [doc]);
 
-  const onMount = (editor) => {
+  const onMount = (editor, monaco) => {
     bindingRef.current = new MonacoBinding(doc.getText('code'), editor.getModel(), new Set([editor]), awareness);
     editor.focus();
+
+    // JetBrains Mono loads asynchronously. Monaco measures glyph widths once at
+    // startup and never watches document.fonts, so if the webfont swaps in after
+    // that, the caret and selection highlights render misaligned. Remeasure once
+    // the fonts are ready so Ctrl+A and the cursor line up with the text.
+    if (typeof monaco?.editor?.remeasureFonts === 'function') {
+      const remeasure = () => { monaco.editor.remeasureFonts(); editor.layout(); };
+      remeasure();
+      if (document.fonts) {
+        document.fonts.ready.then(remeasure);
+        document.fonts.addEventListener('loadingdone', remeasure);
+        remeasureRef.current = remeasure;
+      }
+    }
   };
 
   return (
