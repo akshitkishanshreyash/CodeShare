@@ -15,7 +15,7 @@ function RoomView({ roomId }) {
     () => (user ? { name: user.name, color: colorFor(user.name) } : getGuestIdentity()),
     [user]
   );
-  const { collab, status, language, setLanguage, title, setTitle, presence, error } = useCollabRoom(roomId, identity);
+  const { collab, status, title, setTitle, presence, error } = useCollabRoom(roomId, identity);
   const [meta, setMeta] = useState(null);
 
   useEffect(() => {
@@ -48,8 +48,6 @@ function RoomView({ roomId }) {
         roomId={roomId}
         status={status}
         presence={presence}
-        language={language}
-        onLanguage={setLanguage}
         title={title}
         user={user}
         canRename={Boolean(meta?.isOwner)}
@@ -58,7 +56,7 @@ function RoomView({ roomId }) {
         onClaim={claim}
       />
       <div className="min-h-0 flex-1 bg-panel">
-        {collab && <CodeEditor doc={collab.doc} awareness={collab.awareness} language={language} />}
+        {collab && <CodeEditor doc={collab.doc} awareness={collab.awareness} language="plaintext" />}
       </div>
     </div>
   );

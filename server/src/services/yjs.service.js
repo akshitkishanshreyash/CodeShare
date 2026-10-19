@@ -42,7 +42,7 @@ export async function acquire(roomId, socketId, ownerId) {
   if (flushing.has(roomId)) await flushing.get(roomId);
   let entry = entries.get(roomId);
   if (!entry) {
-    entry = { doc: null, sockets: new Set(), timer: null, language: 'javascript', title: 'Untitled' };
+    entry = { doc: null, sockets: new Set(), timer: null, language: 'plaintext', title: 'Untitled' };
     entries.set(roomId, entry);
     entry.loading = loadDoc(roomId, entry, ownerId).catch((err) => {
       entries.delete(roomId);

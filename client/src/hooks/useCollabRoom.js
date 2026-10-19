@@ -8,7 +8,6 @@ import { SocketIOProvider } from '../lib/SocketIOProvider.js';
 export function useCollabRoom(roomId, identity) {
   const [collab, setCollab] = useState(null); // { doc, awareness }
   const [status, setStatus] = useState('connecting');
-  const [language, setLanguageState] = useState('javascript');
   const [title, setTitle] = useState('Untitled');
   const [presence, setPresence] = useState(1);
   const [error, setError] = useState(null);
@@ -31,8 +30,7 @@ export function useCollabRoom(roomId, identity) {
         onStatus: setStatus,
         onError: setError,
         onPresence: setPresence,
-        onLanguage: setLanguageState,
-        onJoined: (res) => { setLanguageState(res.language); setTitle(res.title); },
+        onJoined: (res) => { setTitle(res.title); },
       },
     });
     providerRef.current = provider;
@@ -55,10 +53,5 @@ export function useCollabRoom(roomId, identity) {
     collab?.awareness.setLocalStateField('user', identity);
   }, [collab, identity]);
 
-  const setLanguage = (lang) => {
-    setLanguageState(lang);
-    providerRef.current?.setLanguage(lang);
-  };
-
-  return { collab, status, language, setLanguage, title, setTitle, presence, error };
+  return { collab, status, title, setTitle, presence, error };
 }

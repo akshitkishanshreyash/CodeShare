@@ -5,7 +5,7 @@ const roomSchema = new mongoose.Schema(
   {
     roomId: { type: String, required: true, unique: true },
     title: { type: String, default: 'Untitled', trim: true, maxlength: 80 },
-    language: { type: String, default: 'javascript' },
+    language: { type: String, default: 'plaintext' },
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true }, // absent = anonymous
     ydocState: { type: Buffer }, // full Yjs document state
     snippet: { type: String, default: '', maxlength: 240 }, // preview for dashboard

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Logo } from './Navbar.jsx';
-import { LANGUAGES } from '../lib/languages.js';
 
 const STATUS = {
   connected: { label: 'Live', dot: 'bg-moss' },
@@ -10,7 +9,7 @@ const STATUS = {
   error: { label: 'Could not join this room', dot: 'bg-red-600' },
 };
 
-export default function Toolbar({ roomId, status, presence, language, onLanguage, title, canRename, onRename, canClaim, onClaim, user }) {
+export default function Toolbar({ roomId, status, presence, title, canRename, onRename, canClaim, onClaim, user }) {
   const [copied, setCopied] = useState(false);
   const [draft, setDraft] = useState(null);
   const s = STATUS[status] ?? STATUS.connecting;
@@ -46,11 +45,6 @@ export default function Toolbar({ roomId, status, presence, language, onLanguage
       ) : (
         <span className="px-2 text-sm font-medium text-ink-soft">{title}</span>
       )}
-
-      <label className="sr-only" htmlFor="lang">Language</label>
-      <select id="lang" value={language} onChange={(e) => onLanguage(e.target.value)} className="input w-auto py-1.5">
-        {LANGUAGES.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
-      </select>
 
       <div className="flex items-center gap-2 text-sm text-ink-soft" role="status">
         <span className={`h-2 w-2 rounded-full ${s.dot}`} aria-hidden="true" />
