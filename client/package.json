@@ -15,7 +15,6 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
     "socket.io-client": "^4.8.0",
-    "y-monaco": "^0.1.6",
     "y-protocols": "^1.0.6",
     "yjs": "^13.6.18"
   },

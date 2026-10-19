@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
-import { MonacoBinding } from 'y-monaco';
+import { MonacoBinding } from '../lib/monacoBinding.js';
 import '../lib/monaco.js';
 
-// y-monaco tags remote cursors with per-client classes; we generate the CSS from awareness.
+// MonacoBinding tags remote cursors with per-client classes; we generate the CSS from awareness.
 function useRemoteCursorStyles(awareness) {
   useEffect(() => {
     const style = document.createElement('style');
