@@ -1,0 +1,16 @@
+{
+  "name": "codeshare-pro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real-time collaborative code editor (React + Monaco + Yjs + Socket.IO + Express + MongoDB)",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently -n server,client -c blue,green \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server run start",
+    "test": "npm --prefix server test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

@@ -1,0 +1,21 @@
+# Render Blueprint: New + > Blueprint > pick this repo
+services:
+  - type: web
+    name: codeshare-api
+    runtime: node
+    rootDir: server
+    plan: starter            # free plan sleeps and drops websockets; use starter+ for real use
+    buildCommand: npm ci --omit=dev
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false          # paste your MongoDB Atlas connection string
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false          # e.g. https://codeshare.vercel.app
+      - key: COOKIE_SAMESITE
+        value: none          # frontend and API are on different domains

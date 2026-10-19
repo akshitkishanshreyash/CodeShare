@@ -1,0 +1,39 @@
+# Production-like stack on your machine:  docker compose up --build
+# App: http://localhost:8080   (nginx serves the UI and proxies /api + /socket.io to the server)
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build: ./server
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGODB_URI: mongodb://mongo:27017/codeshare
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET in a .env file next to docker-compose.yml}
+      CLIENT_URL: http://localhost:8080
+      COOKIE_SAMESITE: lax
+      COOKIE_SECURE: "false" # plain http on localhost; remove behind HTTPS
+
+  client:
+    build: ./client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo-data:
